@@ -4,7 +4,7 @@ import threading
 import time
 
 class UartCommunication:
-    def __init__(self, com_port="/dev/ttyAMA2", baud_rate=115200):
+    def __init__(self, com_port="/dev/serial0", baud_rate=115200):  # com_port를 /dev/serial0로 변경
         try:
             self.ser = serial.Serial(com_port, baud_rate, timeout=2)
             if self.ser.isOpen():
@@ -16,6 +16,10 @@ class UartCommunication:
             print(f"Error initializing serial port: {e}")
 
     def receive_data(self):
+        if not hasattr(self, 'ser') or self.ser is None:
+            print("Serial port is not initialized.")
+            return
+        
         self.ser.flushInput()
         while True:
             try:
@@ -26,6 +30,10 @@ class UartCommunication:
                 print(f"Error receiving data: {e}")
 
     def send_data(self, data):
+        if not hasattr(self, 'ser') or self.ser is None:
+            print("Serial port is not initialized.")
+            return
+        
         try:
             self.ser.write(data.encode('ascii'))
         except Exception as e:
@@ -34,7 +42,7 @@ class UartCommunication:
     def start_receive_thread(self):
         try:
             rx_thread = threading.Thread(target=self.receive_data, name="SerialReceiveThread")
-            rx_thread.setDaemon(True)
+            rx_thread.daemon = True  # setDaemon(True) 대신 daemon 속성 사용
             rx_thread.start()
             print("Started RX Thread")
             time.sleep(0.05)
@@ -93,7 +101,7 @@ def process_camera_and_send_data(uart_comm):
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    uart_comm = UartCommunication(com_port="/dev/ttyAMA2", baud_rate=115200)
+    uart_comm = UartCommunication(com_port="/dev/serial0", baud_rate=115200)  # com_port를 /dev/serial0로 변경
     uart_comm.start_receive_thread()
 
     process_camera_and_send_data(uart_comm)
