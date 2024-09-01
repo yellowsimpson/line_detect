@@ -1,36 +1,26 @@
-import cv2
+import subprocess
+import datetime
 
-def test_camera():
-    # 카메라 열기
-    camera = cv2.VideoCapture(0)
+def take_photo(filename):
+    try:
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        file_path = f"{filename}_{timestamp}.jpg"
+        command = ["libcamera-still", "-o", file_path, "-t", "1"]
+        subprocess.run(command, check=True)
+        print(f"Photo saved as: {file_path}")
+    except Exception as e:
+        print(f"Error: {e}")
 
-    # 카메라 열기 실패 확인
-    if not camera.isOpened():
-        print("Camera not found or not accessible.")
-        return
-
-    # 카메라 설정 (해상도 설정)
-    camera.set(cv2.CAP_PROP_FRAME_WIDTH, 160)
-    camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 120)
-
-    print("Press 'q' to quit")
+def process_camera_and_take_photo():
+    print("Press 's' to take a photo, 'q' to quit")
 
     while True:
-        ret, frame = camera.read()
-        if not ret:
-            print("Failed to grab frame")
+        key = input("Press a key: ").lower()
+        
+        if key == 's':
+            take_photo("captured_image")
+        elif key == 'q':
             break
 
-        # 원본 프레임 표시
-        cv2.imshow('Camera Test', frame)
-
-        # 'q' 키를 눌러 종료
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    # 자원 해제 및 윈도우 종료
-    camera.release()
-    cv2.destroyAllWindows()
-
-if __name__ == '__main__':
-    test_camera()
+if __name__ == "__main__":
+    process_camera_and_take_photo()
