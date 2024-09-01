@@ -2,8 +2,8 @@ import cv2
 import datetime
 
 def capture_photo_on_key():
-    # 카메라 초기화 (0은 기본 카메라 장치를 의미)
-    camera = cv2.VideoCapture(0)
+    # V4L2 백엔드를 사용하여 카메라 초기화
+    camera = cv2.VideoCapture(0, cv2.CAP_V4L2)
 
     if not camera.isOpened():
         print("카메라를 열 수 없습니다.")
