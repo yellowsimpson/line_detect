@@ -7,7 +7,7 @@ def main():
     camera.set(3, 320)  # 해상도 설정 (320x240)
     camera.set(4, 240)
 
-    filepath = "/home/g4/project/camera_save/video/"
+    filepath = "/home/pi/shim/picture"
     print(f"Saving to: {os.path.abspath(filepath)}")
 
     if not os.path.exists(filepath):
