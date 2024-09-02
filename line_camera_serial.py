@@ -93,3 +93,5 @@ if __name__ == '__main__':
     uart_comm.start_receive_thread()
 
     process_camera_and_send_data(uart_comm)
+
+    
