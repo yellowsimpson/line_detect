@@ -57,14 +57,14 @@ while True:
             control_motor('straight')  # 차선을 찾을 수 없을 때는 직진
         else:
             # 각도에 따른 방향 결정
-            if 0 <= angle < 45:
+            if 0 <= angle < 72:
                 control_motor('left')
-            elif 45 <= angle < 145:
+            elif 72 <= angle < 100:
                 control_motor('straight')
-            elif 145 <= angle <= 180:
+            elif 100 <= angle <= 180:
                 control_motor('right')
             else:
-                print("Angle out of range")
+                print("각도를 벗어낫습니다.")
 
             cv2.imshow('lane', img_angle)
             print(f"Angle: {angle}")
